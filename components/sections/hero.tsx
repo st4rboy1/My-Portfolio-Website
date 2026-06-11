@@ -2,7 +2,7 @@
 
 import { TypingEffect } from '@/components/animations/typing-effect'
 import { motion } from 'framer-motion'
-import { ArrowDown } from 'lucide-react'
+import { ArrowDown, Download, FileText } from 'lucide-react'
 
 export function Hero() {
   const scrollToNext = () => {
@@ -24,8 +24,11 @@ export function Hero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="mb-6 md:mb-8"
+          className="mb-4"
         >
+          <span className="inline-block px-4 py-1.5 rounded-full text-sm font-medium bg-primary/10 text-primary border border-primary/20">
+            Available for Full-Time & Remote Roles
+          </span>
         </motion.div>
 
         <motion.h1
@@ -34,16 +37,16 @@ export function Hero() {
           transition={{ duration: 0.6, delay: 0.1 }}
           className="text-4xl md:text-6xl lg:text-7xl font-bold mb-4 md:mb-6 leading-tight"
         >
-          Hi, I'm <span className="gradient-text">Christian Kyle Masangcay</span>
+          Hi, I&apos;m <span className="gradient-text">Christian Kyle Masangcay</span>
         </motion.h1>
 
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="text-lg md:text-2xl text-muted-foreground mb-8 leading-relaxed"
+          className="text-lg md:text-2xl text-muted-foreground mb-4 leading-relaxed"
         >
-          <TypingEffect words={['Full Stack Developer', 'UI/UX Enthusiast', 'Problem Solver', 'Creative Builder']} speed={60} />
+          <TypingEffect words={['Full Stack Developer', 'Node.js & React Specialist', 'Laravel & TypeScript Dev', 'DevOps & CI/CD Advocate']} speed={60} />
         </motion.p>
 
         <motion.p
@@ -52,8 +55,9 @@ export function Hero() {
           transition={{ duration: 0.6, delay: 0.3 }}
           className="text-base md:text-lg text-muted-foreground mb-8 max-w-2xl mx-auto leading-relaxed"
         >
-          I craft beautiful, functional digital experiences using modern technologies. Specialized in React, Next.js, and full-stack
-          development.
+          Full-stack developer with two production systems — a solo-built Material Management System
+          (Node.js/Express, React, PostgreSQL) and a team-built enrollment system with 1,575+ commits.
+          Proficient in CI/CD, Docker, and multi-layer automated testing.
         </motion.p>
 
         <motion.div
@@ -73,13 +77,35 @@ export function Hero() {
           >
             Get In Touch
           </motion.button>
+
+          <motion.a
+            href="/resume.pdf"
+            download="Christian-Kyle-Masangcay-Resume.pdf"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="inline-flex items-center gap-2 px-8 py-3 rounded-lg border border-primary/40 text-foreground font-semibold hover:bg-white/10 transition-colors"
+          >
+            <Download className="w-4 h-4" />
+            Download CV
+          </motion.a>
+
+          <motion.a
+            href="/resume"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="inline-flex items-center gap-2 px-8 py-3 rounded-lg border border-white/10 text-foreground font-semibold hover:bg-white/10 transition-colors"
+          >
+            <FileText className="w-4 h-4" />
+            Preview Resume
+          </motion.a>
+
           <motion.button
             onClick={scrollToNext}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             className="px-8 py-3 rounded-lg glass-morphism text-foreground font-semibold hover:bg-white/20 transition-colors"
           >
-            Learn More
+            About Me ↓
           </motion.button>
         </motion.div>
       </div>
@@ -87,6 +113,7 @@ export function Hero() {
       {/* Scroll indicator */}
       <motion.button
         onClick={scrollToNext}
+        aria-label="Scroll to About section"
         className="absolute bottom-8 left-1/2 -translate-x-1/2 text-muted-foreground hover:text-foreground transition-colors"
         animate={{ y: [0, 10, 0] }}
         transition={{ duration: 2, repeat: Infinity }}

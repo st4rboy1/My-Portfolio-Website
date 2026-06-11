@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Menu, X, Moon, Sun } from 'lucide-react'
+import { Menu, X, Moon, Sun, Download } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useTheme } from 'next-themes'
 
@@ -48,14 +48,18 @@ export function Navbar({ activeSection }: NavbarProps) {
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
+      role="navigation"
+      aria-label="Main navigation"
     >
       <div className="max-w-6xl mx-auto px-4 md:px-6 flex items-center justify-between">
-        <motion.div
+        <motion.button
+          onClick={() => scrollToSection('about')}
           className="text-xl md:text-2xl font-bold gradient-text"
           whileHover={{ scale: 1.05 }}
+          aria-label="Kyle Masangcay — scroll to top"
         >
           Kyle Masangcay
-        </motion.div>
+        </motion.button>
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center gap-8">
@@ -63,15 +67,36 @@ export function Navbar({ activeSection }: NavbarProps) {
             <motion.button
               key={item.id}
               onClick={() => scrollToSection(item.id)}
-              className={`text-sm font-medium transition-colors ${
-                activeSection === item.id ? 'text-primary' : 'text-muted-foreground hover:text-foreground'
+              className={`text-sm font-medium transition-colors relative ${
+                activeSection === item.id
+                  ? 'text-primary'
+                  : 'text-muted-foreground hover:text-foreground'
               }`}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
+              aria-current={activeSection === item.id ? 'true' : undefined}
             >
               {item.label}
+              {activeSection === item.id && (
+                <motion.span
+                  layoutId="nav-underline"
+                  className="absolute -bottom-1 left-0 right-0 h-0.5 bg-primary rounded-full"
+                />
+              )}
             </motion.button>
           ))}
+
+          {/* Download CV */}
+          <motion.a
+            href="/resume.pdf"
+            download="Christian-Kyle-Masangcay-Resume.pdf"
+            className="inline-flex items-center gap-1.5 text-sm font-medium px-3 py-1.5 rounded-lg border border-primary/40 text-primary hover:bg-primary/10 transition-colors"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <Download className="w-3.5 h-3.5" />
+            CV
+          </motion.a>
 
           {/* Theme Toggle */}
           {mounted && (
@@ -80,7 +105,7 @@ export function Navbar({ activeSection }: NavbarProps) {
               className="p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+              aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
             >
               {theme === 'dark' ? (
                 <Sun className="w-5 h-5 text-yellow-400" />
@@ -96,6 +121,8 @@ export function Navbar({ activeSection }: NavbarProps) {
           className="md:hidden text-foreground"
           onClick={() => setIsOpen(!isOpen)}
           whileTap={{ scale: 0.95 }}
+          aria-label={isOpen ? 'Close menu' : 'Open menu'}
+          aria-expanded={isOpen}
         >
           {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
         </motion.button>
@@ -108,6 +135,7 @@ export function Navbar({ activeSection }: NavbarProps) {
         animate={isOpen ? { opacity: 1, y: 0 } : { opacity: 0, y: -10 }}
         transition={{ duration: 0.2 }}
         style={{ pointerEvents: isOpen ? 'auto' : 'none' }}
+        aria-hidden={!isOpen}
       >
         <div className="flex flex-col">
           {navItems.map((item, index) => (
@@ -115,7 +143,9 @@ export function Navbar({ activeSection }: NavbarProps) {
               key={item.id}
               onClick={() => scrollToSection(item.id)}
               className={`px-4 py-3 text-sm font-medium text-left transition-colors border-b border-white/10 last:border-b-0 ${
-                activeSection === item.id ? 'text-primary bg-white/5' : 'text-muted-foreground hover:text-foreground hover:bg-white/5'
+                activeSection === item.id
+                  ? 'text-primary bg-white/5'
+                  : 'text-muted-foreground hover:text-foreground hover:bg-white/5'
               }`}
               initial={{ opacity: 0 }}
               animate={isOpen ? { opacity: 1 } : { opacity: 0 }}
@@ -124,7 +154,20 @@ export function Navbar({ activeSection }: NavbarProps) {
               {item.label}
             </motion.button>
           ))}
-          
+
+          {/* Mobile Download CV */}
+          <motion.a
+            href="/resume.pdf"
+            download="Christian-Kyle-Masangcay-Resume.pdf"
+            className="px-4 py-3 text-sm font-medium text-left transition-colors border-t border-white/10 flex items-center gap-2 text-primary hover:bg-white/5"
+            initial={{ opacity: 0 }}
+            animate={isOpen ? { opacity: 1 } : { opacity: 0 }}
+            transition={{ delay: navItems.length * 0.05 }}
+          >
+            <Download className="w-4 h-4" />
+            Download CV
+          </motion.a>
+
           {/* Mobile Theme Toggle */}
           {mounted && (
             <motion.button
@@ -132,7 +175,8 @@ export function Navbar({ activeSection }: NavbarProps) {
               className="px-4 py-3 text-sm font-medium text-left transition-colors border-t border-white/10 flex items-center gap-2 hover:bg-white/5"
               initial={{ opacity: 0 }}
               animate={isOpen ? { opacity: 1 } : { opacity: 0 }}
-              transition={{ delay: navItems.length * 0.05 }}
+              transition={{ delay: (navItems.length + 1) * 0.05 }}
+              aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
             >
               {theme === 'dark' ? (
                 <>

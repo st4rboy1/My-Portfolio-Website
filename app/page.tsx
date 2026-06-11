@@ -32,8 +32,10 @@ export default function Home() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
+  const currentYear = new Date().getFullYear()
+
   return (
-    <main className="overflow-x-hidden">
+    <main id="main" className="overflow-x-hidden">
       <Navbar activeSection={activeSection} />
       <Hero />
       <About />
@@ -44,7 +46,7 @@ export default function Home() {
       {/* Footer */}
       <footer className="py-8 px-4 border-t border-white/10">
         <div className="max-w-6xl mx-auto text-center text-sm text-muted-foreground">
-          <p>© 2024 ckmasangcay. All rights reserved. </p>
+          <p>© {currentYear} ckmasangcay. All rights reserved.</p>
         </div>
       </footer>
     </main>
