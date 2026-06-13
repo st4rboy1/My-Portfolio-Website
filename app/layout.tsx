@@ -26,6 +26,11 @@ export const metadata: Metadata = {
     description: 'IT student and full-stack developer specializing in Laravel 12, React 18, and production-grade web systems.',
     creator: '@kaayl_x',
   },
+  icons: {
+    icon: '/favicon.svg',
+    shortcut: '/favicon.svg',
+    apple: '/favicon.svg',
+  },
   alternates: {
     canonical: 'https://ckmasangcay.vercel.app',
   },
