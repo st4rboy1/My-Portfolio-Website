@@ -3,6 +3,7 @@
 import React from "react"
 import emailjs from '@emailjs/browser'
 import { ScrollReveal } from '@/components/animations/scroll-reveal'
+import { SectionHeading } from '@/components/section-heading'
 import { motion } from 'framer-motion'
 import { Mail, Github, Linkedin, Twitter, MapPin, Clock } from 'lucide-react'
 import { useState, useEffect } from 'react'
@@ -53,7 +54,6 @@ export function Contact() {
       }, 5000)
     } catch (err) {
       setError('Failed to send message. Please try again, or email me directly.')
-      console.error('EmailJS error:', err)
     } finally {
       setLoading(false)
     }
@@ -90,10 +90,11 @@ export function Contact() {
     <section id="contact" className="py-20 md:py-32 px-4 relative" style={{ scrollMarginTop: '80px' }}>
       <div className="max-w-4xl mx-auto">
         <ScrollReveal>
-          <div className="text-center mb-16 md:mb-20">
-            <h2 className="text-3xl md:text-5xl font-bold mb-4">Let&apos;s Work Together</h2>
-            <div className="w-20 h-1 bg-primary mx-auto rounded-full" />
-          </div>
+          <SectionHeading
+            eyebrow="Contact"
+            title="Let&apos;s Work Together"
+            description="Open to junior roles, freelance discussions, and collaboration on practical products."
+          />
         </ScrollReveal>
 
         <div className="grid md:grid-cols-2 gap-12">

@@ -5,10 +5,16 @@ import { motion } from 'framer-motion'
 import { ArrowDown, Download, FileText } from 'lucide-react'
 
 export function Hero() {
-  const scrollToNext = () => {
-    const aboutSection = document.getElementById('about')
-    aboutSection?.scrollIntoView({ behavior: 'smooth' })
+  const scrollToSection = (id: string) => {
+    const section = document.getElementById(id)
+    section?.scrollIntoView({ behavior: 'smooth' })
   }
+
+  const proofPoints = [
+    { value: '2', label: 'Production systems shipped' },
+    { value: '109', label: 'Automated tests across layers' },
+    { value: '40+', label: 'REST endpoints built' },
+  ]
 
   return (
     <section className="min-h-screen flex items-center justify-center px-4 pt-20 md:pt-0 relative overflow-hidden">
@@ -63,8 +69,22 @@ export function Hero() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.35 }}
+          className="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4 max-w-3xl mx-auto mb-8"
+        >
+          {proofPoints.map((point) => (
+            <div key={point.label} className="rounded-xl border border-white/10 bg-white/5 px-4 py-4 text-center backdrop-blur-sm">
+              <div className="text-2xl md:text-3xl font-bold text-primary leading-none">{point.value}</div>
+              <p className="text-xs md:text-sm text-muted-foreground mt-2 leading-relaxed">{point.label}</p>
+            </div>
+          ))}
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.4 }}
-          className="flex flex-col sm:flex-row items-center justify-center gap-4 md:gap-6"
+          className="flex flex-col sm:flex-row items-center justify-center gap-4 md:gap-5"
         >
           <motion.button
             onClick={() => {
@@ -73,9 +93,19 @@ export function Hero() {
             }}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="px-8 py-3 rounded-lg bg-primary text-primary-foreground font-semibold hover:bg-primary/90 transition-colors"
+            className="px-8 py-3 rounded-lg bg-primary text-primary-foreground font-semibold hover:bg-primary/90 transition-colors shadow-lg shadow-black/10"
           >
             Get In Touch
+          </motion.button>
+
+          <motion.button
+            onClick={() => scrollToSection('projects')}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="inline-flex items-center gap-2 px-8 py-3 rounded-lg border border-primary/40 text-foreground font-semibold hover:bg-white/10 transition-colors"
+          >
+            <ArrowDown className="w-4 h-4 rotate-[-90deg]" />
+            View Projects
           </motion.button>
 
           <motion.a
@@ -83,36 +113,17 @@ export function Hero() {
             download="Christian-Kyle-Masangcay-Resume.pdf"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="inline-flex items-center gap-2 px-8 py-3 rounded-lg border border-primary/40 text-foreground font-semibold hover:bg-white/10 transition-colors"
+            className="inline-flex items-center gap-2 px-8 py-3 rounded-lg border border-white/10 text-foreground font-semibold hover:bg-white/10 transition-colors"
           >
             <Download className="w-4 h-4" />
             Download CV
           </motion.a>
-
-          <motion.a
-            href="/resume"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="inline-flex items-center gap-2 px-8 py-3 rounded-lg border border-white/10 text-foreground font-semibold hover:bg-white/10 transition-colors"
-          >
-            <FileText className="w-4 h-4" />
-            Preview Resume
-          </motion.a>
-
-          <motion.button
-            onClick={scrollToNext}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="px-8 py-3 rounded-lg glass-morphism text-foreground font-semibold hover:bg-white/20 transition-colors"
-          >
-            About Me ↓
-          </motion.button>
         </motion.div>
       </div>
 
       {/* Scroll indicator */}
       <motion.button
-        onClick={scrollToNext}
+        onClick={() => scrollToSection('about')}
         aria-label="Scroll to About section"
         className="absolute bottom-8 left-1/2 -translate-x-1/2 text-muted-foreground hover:text-foreground transition-colors"
         animate={{ y: [0, 10, 0] }}

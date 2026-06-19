@@ -27,6 +27,17 @@ export function Navbar({ activeSection }: NavbarProps) {
   }, [])
 
   useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setIsOpen(false)
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [])
+
+  useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 50)
     }
@@ -53,6 +64,7 @@ export function Navbar({ activeSection }: NavbarProps) {
     >
       <div className="max-w-6xl mx-auto px-4 md:px-6 flex items-center justify-between">
         <motion.button
+          type="button"
           onClick={() => scrollToSection('about')}
           className="text-xl md:text-2xl font-bold gradient-text"
           whileHover={{ scale: 1.05 }}
@@ -65,6 +77,7 @@ export function Navbar({ activeSection }: NavbarProps) {
         <div className="hidden md:flex items-center gap-8">
           {navItems.map((item) => (
             <motion.button
+              type="button"
               key={item.id}
               onClick={() => scrollToSection(item.id)}
               className={`text-sm font-medium transition-colors relative ${
@@ -74,7 +87,7 @@ export function Navbar({ activeSection }: NavbarProps) {
               }`}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              aria-current={activeSection === item.id ? 'true' : undefined}
+              aria-current={activeSection === item.id ? 'page' : undefined}
             >
               {item.label}
               {activeSection === item.id && (
@@ -101,6 +114,7 @@ export function Navbar({ activeSection }: NavbarProps) {
           {/* Theme Toggle */}
           {mounted && (
             <motion.button
+              type="button"
               onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
               className="p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors"
               whileHover={{ scale: 1.05 }}
@@ -118,11 +132,14 @@ export function Navbar({ activeSection }: NavbarProps) {
 
         {/* Mobile Menu Button */}
         <motion.button
+          type="button"
           className="md:hidden text-foreground"
           onClick={() => setIsOpen(!isOpen)}
           whileTap={{ scale: 0.95 }}
           aria-label={isOpen ? 'Close menu' : 'Open menu'}
           aria-expanded={isOpen}
+          aria-controls="mobile-navigation-menu"
+          aria-haspopup="menu"
         >
           {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
         </motion.button>
@@ -130,6 +147,7 @@ export function Navbar({ activeSection }: NavbarProps) {
 
       {/* Mobile Navigation */}
       <motion.div
+        id="mobile-navigation-menu"
         className="md:hidden absolute top-full left-0 right-0 glass-morphism-dark mt-2 mx-4 rounded-lg overflow-hidden"
         initial={{ opacity: 0, y: -10 }}
         animate={isOpen ? { opacity: 1, y: 0 } : { opacity: 0, y: -10 }}
@@ -140,6 +158,7 @@ export function Navbar({ activeSection }: NavbarProps) {
         <div className="flex flex-col">
           {navItems.map((item, index) => (
             <motion.button
+              type="button"
               key={item.id}
               onClick={() => scrollToSection(item.id)}
               className={`px-4 py-3 text-sm font-medium text-left transition-colors border-b border-white/10 last:border-b-0 ${
@@ -171,6 +190,7 @@ export function Navbar({ activeSection }: NavbarProps) {
           {/* Mobile Theme Toggle */}
           {mounted && (
             <motion.button
+              type="button"
               onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
               className="px-4 py-3 text-sm font-medium text-left transition-colors border-t border-white/10 flex items-center gap-2 hover:bg-white/5"
               initial={{ opacity: 0 }}

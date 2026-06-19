@@ -8,28 +8,42 @@ import { Navbar } from '@/components/sections/navbar'
 import { Projects } from '@/components/sections/projects'
 import { useEffect, useState } from 'react'
 
+const sectionIds = ['about', 'experience', 'projects', 'contact']
+
 export default function Home() {
-  const [activeSection, setActiveSection] = useState('')
+  const [activeSection, setActiveSection] = useState('about')
 
   useEffect(() => {
-    const handleScroll = () => {
-      const sections = ['about', 'experience', 'projects', 'contact']
-      const scrollPosition = window.scrollY + 100
+    const observer = new IntersectionObserver(
+      (entries) => {
+        let nextSection = ''
+        let highestRatio = 0
 
-      for (const section of sections) {
-        const element = document.getElementById(section)
-        if (element) {
-          const { offsetTop, offsetHeight } = element
-          if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
-            setActiveSection(section)
-            break
+        for (const entry of entries) {
+          if (entry.isIntersecting && entry.intersectionRatio >= highestRatio) {
+            highestRatio = entry.intersectionRatio
+            nextSection = entry.target.id
           }
         }
+
+        if (nextSection) {
+          setActiveSection(nextSection)
+        }
+      },
+      {
+        threshold: [0.2, 0.35, 0.5, 0.65],
+        rootMargin: '-20% 0px -50% 0px',
+      }
+    )
+
+    for (const sectionId of sectionIds) {
+      const element = document.getElementById(sectionId)
+      if (element) {
+        observer.observe(element)
       }
     }
 
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
+    return () => observer.disconnect()
   }, [])
 
   const currentYear = new Date().getFullYear()
