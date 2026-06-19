@@ -2,6 +2,7 @@
 
 import Image from 'next/image'
 import { ScrollReveal } from '@/components/animations/scroll-reveal'
+import { SectionHeading } from '@/components/section-heading'
 import { motion } from 'framer-motion'
 import { ExternalLink, Github, ChevronRight } from 'lucide-react'
 import { useState } from 'react'
@@ -208,10 +209,11 @@ export function Projects() {
     <section id="projects" className="py-20 md:py-32 px-4 relative" style={{ scrollMarginTop: '80px' }}>
       <div className="max-w-7xl mx-auto">
         <ScrollReveal>
-          <div className="text-center mb-16 md:mb-20">
-            <h2 className="text-3xl md:text-5xl font-bold mb-4">Featured Projects</h2>
-            <div className="w-20 h-1 bg-primary mx-auto rounded-full" />
-          </div>
+          <SectionHeading
+            eyebrow="Selected Work"
+            title="Featured Projects"
+            description="A set of production systems and client work that show product thinking, execution depth, and polish."
+          />
         </ScrollReveal>
 
         {/* Featured projects */}
@@ -443,7 +445,7 @@ export function Projects() {
                     <Github className="w-5 h-5" />
                     View Code on GitHub
                   </motion.a>
-                  {selectedProject.live && (
+                  {selectedProject.live ? (
                     <motion.a
                       href={selectedProject.live}
                       target="_blank"
@@ -456,6 +458,11 @@ export function Projects() {
                       <ExternalLink className="w-5 h-5" />
                       Live Demo
                     </motion.a>
+                  ) : (
+                    <div className="inline-flex items-center gap-2 px-6 py-3 rounded-lg border border-white/10 text-sm font-medium text-muted-foreground bg-white/5">
+                      <ExternalLink className="w-5 h-5" />
+                      Live demo unavailable
+                    </div>
                   )}
                 </div>
               </div>

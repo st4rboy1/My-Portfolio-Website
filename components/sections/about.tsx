@@ -1,6 +1,7 @@
 'use client'
 
 import { ScrollReveal } from '@/components/animations/scroll-reveal'
+import { SectionHeading } from '@/components/section-heading'
 import { motion } from 'framer-motion'
 import { Code, Database, Box, GitBranch, Server, Palette, Zap, Terminal } from 'lucide-react'
 
@@ -82,10 +83,11 @@ export function About() {
     <section id="about" className="py-20 md:py-32 px-4 relative" style={{ scrollMarginTop: '80px' }}>
       <div className="max-w-6xl mx-auto">
         <ScrollReveal>
-          <div className="text-center mb-16 md:mb-20">
-            <h2 className="text-3xl md:text-5xl font-bold mb-4">About Me</h2>
-            <div className="w-20 h-1 bg-primary mx-auto rounded-full" />
-          </div>
+          <SectionHeading
+            eyebrow="About"
+            title="About Me"
+            description="A concise snapshot of the experience, stack, and delivery mindset that shapes my work."
+          />
         </ScrollReveal>
 
         <motion.div

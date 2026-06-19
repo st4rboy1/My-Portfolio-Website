@@ -94,7 +94,7 @@ function Calendar({
           } = restProps;
 
           // Re-assemble essential button props with type assertions
-          const buttonSpecificProps: React.ButtonHTMLAttributes<HTMLButtonElement> = {
+          const buttonSpecificProps = {
             ...otherHtmlAttributes, // Pass generic HTML attributes
             onClick: originalOnClick as React.MouseEventHandler<HTMLButtonElement> | undefined,
             onFocus: originalOnFocus as React.FocusEventHandler<HTMLButtonElement> | undefined,
@@ -103,7 +103,7 @@ function Calendar({
             onMouseUp: originalOnMouseUp as React.MouseEventHandler<HTMLButtonElement> | undefined,
             onKeyDown: originalOnKeyDown as React.KeyboardEventHandler<HTMLButtonElement> | undefined,
             onKeyUp: originalOnKeyUp as React.KeyboardEventHandler<HTMLButtonElement> | undefined,
-          };
+          } as React.ButtonHTMLAttributes<HTMLButtonElement>;
 
           return (
             <CalendarDayButton

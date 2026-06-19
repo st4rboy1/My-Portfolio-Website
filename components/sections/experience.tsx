@@ -1,6 +1,7 @@
 'use client'
 
 import { ScrollReveal } from '@/components/animations/scroll-reveal'
+import { SectionHeading } from '@/components/section-heading'
 import { motion } from 'framer-motion'
 import { Briefcase } from 'lucide-react'
 
@@ -56,10 +57,11 @@ export function Experience() {
     <section id="experience" className="py-20 md:py-32 px-4 relative" style={{ scrollMarginTop: '80px' }}>
       <div className="max-w-6xl mx-auto">
         <ScrollReveal>
-          <div className="text-center mb-16 md:mb-20">
-            <h2 className="text-3xl md:text-5xl font-bold mb-4">Experience</h2>
-            <div className="w-20 h-1 bg-primary mx-auto rounded-full" />
-          </div>
+          <SectionHeading
+            eyebrow="Experience"
+            title="Experience"
+            description="A delivery history that shows ownership, scope, and shipping discipline across real projects."
+          />
         </ScrollReveal>
 
         {/* Timeline */}

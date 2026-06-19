@@ -1,7 +1,7 @@
 'use client'
 
 import { ReactNode, useEffect, useRef, useState } from 'react'
-import { motion } from 'framer-motion'
+import { motion, useReducedMotion } from 'framer-motion'
 
 interface ScrollRevealProps {
   children: ReactNode
@@ -12,8 +12,14 @@ interface ScrollRevealProps {
 export function ScrollReveal({ children, delay = 0, duration = 0.6 }: ScrollRevealProps) {
   const ref = useRef<HTMLDivElement>(null)
   const [isVisible, setIsVisible] = useState(false)
+  const shouldReduceMotion = useReducedMotion()
 
   useEffect(() => {
+    if (shouldReduceMotion) {
+      setIsVisible(true)
+      return
+    }
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -33,12 +39,12 @@ export function ScrollReveal({ children, delay = 0, duration = 0.6 }: ScrollReve
         observer.unobserve(ref.current)
       }
     }
-  }, [])
+  }, [shouldReduceMotion])
 
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, y: 20 }}
+      initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
       animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
       transition={{ duration, delay }}
     >

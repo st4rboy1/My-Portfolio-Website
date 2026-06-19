@@ -1,8 +1,14 @@
 'use client'
 
-import { motion } from 'framer-motion'
+import { motion, useReducedMotion } from 'framer-motion'
 
 export function AnimatedBackground() {
+  const shouldReduceMotion = useReducedMotion()
+
+  if (shouldReduceMotion) {
+    return <div className="fixed inset-0 -z-10 overflow-hidden bg-background" aria-hidden="true" />
+  }
+
   return (
     <div className="fixed inset-0 -z-10 overflow-hidden bg-background">
       {/* Animated gradient blobs */}
