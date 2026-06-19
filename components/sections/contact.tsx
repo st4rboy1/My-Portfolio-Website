@@ -13,8 +13,15 @@ export function Contact() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
+  const emailjsPublicKey = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY
+  const emailjsServiceId = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID
+  const emailjsTemplateId = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID
+  const emailjsConfigured = Boolean(emailjsPublicKey && emailjsServiceId && emailjsTemplateId)
+
   useEffect(() => {
-    emailjs.init(process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY || '')
+    if (emailjsPublicKey) {
+      emailjs.init(emailjsPublicKey)
+    }
   }, [])
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -22,10 +29,16 @@ export function Contact() {
     setLoading(true)
     setError('')
 
+    if (!emailjsConfigured || !emailjsServiceId || !emailjsTemplateId) {
+      setError('Contact form is not configured yet. Please email me directly or set the EmailJS environment variables.')
+      setLoading(false)
+      return
+    }
+
     try {
       await emailjs.send(
-        process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID || '',
-        process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID || '',
+        emailjsServiceId,
+        emailjsTemplateId,
         {
           from_name: formData.name,
           from_email: formData.email,
@@ -147,12 +160,12 @@ export function Contact() {
 
               <motion.button
                 type="submit"
-                disabled={loading || submitted}
+                disabled={loading || submitted || !emailjsConfigured}
                 whileHover={{ scale: !loading && !submitted ? 1.02 : 1 }}
                 whileTap={{ scale: !loading && !submitted ? 0.98 : 1 }}
                 className="w-full px-6 py-3 rounded-lg bg-primary text-primary-foreground font-semibold hover:bg-primary/90 transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
               >
-                {loading ? 'Sending…' : submitted ? '✓ Message sent!' : 'Send Message'}
+                {loading ? 'Sending…' : submitted ? '✓ Message sent!' : !emailjsConfigured ? 'Contact form unavailable' : 'Send Message'}
               </motion.button>
 
               {error && (
