@@ -1,12 +1,11 @@
 'use client'
 
 import React from "react"
-import emailjs from '@emailjs/browser'
 import { ScrollReveal } from '@/components/animations/scroll-reveal'
 import { SectionHeading } from '@/components/section-heading'
 import { motion } from 'framer-motion'
 import { Mail, Github, Linkedin, Twitter, MapPin, Clock } from 'lucide-react'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 
 export function Contact() {
   const [formData, setFormData] = useState({ name: '', email: '', message: '' })
@@ -14,46 +13,30 @@ export function Contact() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
-  const emailjsPublicKey = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY
-  const emailjsServiceId = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID
-  const emailjsTemplateId = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID
-  const emailjsConfigured = Boolean(emailjsPublicKey && emailjsServiceId && emailjsTemplateId)
-
-  useEffect(() => {
-    if (emailjsPublicKey) {
-      emailjs.init(emailjsPublicKey)
-    }
-  }, [])
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
     setError('')
 
-    if (!emailjsConfigured || !emailjsServiceId || !emailjsTemplateId) {
-      setError('Contact form is not configured yet. Please email me directly or set the EmailJS environment variables.')
-      setLoading(false)
-      return
-    }
-
     try {
-      await emailjs.send(
-        emailjsServiceId,
-        emailjsTemplateId,
-        {
-          from_name: formData.name,
-          from_email: formData.email,
-          message: formData.message,
-          to_email: 'masangcaykyle11@gmail.com',
-        }
-      )
+      const res = await fetch('/api/send-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      })
+      
+      if (!res.ok) {
+        const data = await res.json()
+        throw new Error(data.error || 'Failed to send message')
+      }
+      
       setSubmitted(true)
       setFormData({ name: '', email: '', message: '' })
       setTimeout(() => {
         setSubmitted(false)
       }, 5000)
     } catch (err) {
-      setError('Failed to send message. Please try again, or email me directly.')
+      setError(err instanceof Error ? err.message : 'Failed to send message. Please try again, or email me directly.')
     } finally {
       setLoading(false)
     }
@@ -161,12 +144,12 @@ export function Contact() {
 
               <motion.button
                 type="submit"
-                disabled={loading || submitted || !emailjsConfigured}
+                disabled={loading || submitted}
                 whileHover={{ scale: !loading && !submitted ? 1.02 : 1 }}
                 whileTap={{ scale: !loading && !submitted ? 0.98 : 1 }}
                 className="w-full px-6 py-3 rounded-lg bg-primary text-primary-foreground font-semibold hover:bg-primary/90 transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
               >
-                {loading ? 'Sending…' : submitted ? '✓ Message sent!' : !emailjsConfigured ? 'Contact form unavailable' : 'Send Message'}
+                {loading ? 'Sending…' : submitted ? '✓ Message sent!' : 'Send Message'}
               </motion.button>
 
               {error && (
