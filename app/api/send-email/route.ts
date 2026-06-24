@@ -1,4 +1,4 @@
-import emailjs from '@emailjs/browser'
+import { EmailJSResponseStatus, send } from '@emailjs/nodejs'
 
 const hits = new Map<string, number[]>()
 
@@ -26,14 +26,16 @@ export async function POST(req: Request) {
   }
 
   try {
-    await emailjs.send(
+    await send(
       process.env.EMAILJS_SERVICE_ID!,
       process.env.EMAILJS_TEMPLATE_ID!,
       { from_name: name, from_email: email, message, to_email: 'masangcaykyle11@gmail.com' },
-      process.env.EMAILJS_PUBLIC_KEY!
+      { publicKey: process.env.EMAILJS_PUBLIC_KEY!, privateKey: process.env.EMAILJS_PRIVATE_KEY! }
     )
     return Response.json({ success: true })
-  } catch {
+  } catch (err) {
+    const error = err as any
+    console.error('EmailJS error:', { status: error?.status, text: error?.text })
     return Response.json({ error: 'Failed to send. Try again later.' }, { status: 500 })
   }
 }
